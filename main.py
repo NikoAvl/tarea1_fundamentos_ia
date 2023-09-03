@@ -159,7 +159,7 @@ class Gato:
         
         
         
-        
+
 
     def convertir_coordenadas_a_indice(self, fila, columna,size_tablero):
         # Convertir coordenadas 2D en índice 1D
@@ -174,9 +174,36 @@ class Gato:
             else:
                 messagebox.showinfo("Juego del Gato", "Has perdido")
             self.juego.reiniciar()
+            
             for i in range(size_tablero):
                 for j in range(size_tablero):
                     self.botones[i][j]["image"] = self.vacio
+            
+            fila_centro = size_tablero // 2 - 1  # Restar 1 porque las listas comienzan desde 0
+            columna_centro = size_tablero // 2 - 1
+
+                # Convertir coordenadas a índices y colocar fichas en el centro
+            self.indice_1 = self.convertir_coordenadas_a_indice(fila_centro, columna_centro,size_tablero)
+            self.indice_2 = self.convertir_coordenadas_a_indice(fila_centro, columna_centro + 1,size_tablero)
+            self.indice_3 = self.convertir_coordenadas_a_indice(fila_centro + 1, columna_centro,size_tablero)
+            self.indice_4 = self.convertir_coordenadas_a_indice(fila_centro + 1, columna_centro + 1,size_tablero)
+            self.juego.tablero[self.indice_1] = 1  # Jugador 1
+            self.juego.tablero[self.indice_2] = -1  # Jugador 2
+            self.juego.tablero[self.indice_3] = -1  # Jugador 2
+            self.juego.tablero[self.indice_4] = 1  # Jugador 1
+            self.botones[fila_centro][columna_centro].config(image = self.raton)
+            self.botones[fila_centro+1][columna_centro+1].config(image = self.raton)
+            self.botones[fila_centro+1][columna_centro].config(image = self.bot)
+            self.botones[fila_centro][columna_centro+1].config(image = self.bot)
+
+            #PUNTAJE JUGADORES
+            puntaje_player = sum(valor == -1 for valor in self.juego.tablero)
+            self.mostrar_player_puntaje = Label(self.principal,text=f"PLAYER: {puntaje_player}",fg="white",bg="green")
+            self.mostrar_player_puntaje.grid(row=0,column=0)
+            puntaje_bot = sum(valor == 1 for valor in self.juego.tablero)
+            self.mostrar_bot_puntaje = Label(self.principal,text=f"BOT: {puntaje_bot}",fg="white",bg="green")
+            self.mostrar_bot_puntaje.grid(row=0,column=2)
+
             return True
         else:
             return False
