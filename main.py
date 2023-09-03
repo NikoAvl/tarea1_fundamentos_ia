@@ -59,8 +59,8 @@ class Gato:
     #VENTANA DE JUEGO
         
         self.ventana.destroy()
-        
         self.principal = Tk()
+        self.principal.configure(bg="green")
         self.principal.title("Reversi")
         self.botones=[]
         self.bot=PhotoImage(file="bot.png")
@@ -80,6 +80,7 @@ class Gato:
 
         # Establecer la ubicación de la ventana centrada
         self.principal.geometry("+%d+%d" % (x, y))
+        
 
         for i in range(size_tablero):
             fila=[]
@@ -88,7 +89,7 @@ class Gato:
                 b1.bind("<Button-1>",lambda event, size_tablero=size_tablero: self.click(event,size_tablero))
                 b1.x=i
                 b1.y=j
-                b1.grid(row=i,column=j)
+                b1.grid(row=i+1,column=j)
                 fila.append(b1)
             self.botones.append(fila)
 
@@ -108,8 +109,19 @@ class Gato:
         self.botones[fila_centro+1][columna_centro+1].config(image = self.raton)
         self.botones[fila_centro+1][columna_centro].config(image = self.bot)
         self.botones[fila_centro][columna_centro+1].config(image = self.bot)
+
+        #PUNTAJE JUGADORES
+        puntaje_player = sum(valor == -1 for valor in self.juego.tablero)
+        self.mostrar_player_puntaje = Label(self.principal,text=f"PLAYER: {puntaje_player}",fg="white",bg="green")
+        self.mostrar_player_puntaje.grid(row=0,column=0)
+        puntaje_bot = sum(valor == 1 for valor in self.juego.tablero)
+        self.mostrar_bot_puntaje = Label(self.principal,text=f"BOT: {puntaje_bot}",fg="white",bg="green")
+        self.mostrar_bot_puntaje.grid(row=0,column=2)
         
-    
+        
+        
+        
+
     def convertir_coordenadas_a_indice(self, fila, columna,size_tablero):
         # Convertir coordenadas 2D en índice 1D
         return fila * size_tablero + columna
@@ -135,6 +147,13 @@ class Gato:
         if self.juego.tablero[evento.widget.x * size_tablero + evento.widget.y]==0:
             self.juego.jugar(evento.widget.x * size_tablero + evento.widget.y)
             evento.widget["image"] = self.raton
+            puntaje_player = sum(valor == -1 for valor in self.juego.tablero)
+            self.mostrar_player_puntaje = Label(self.principal,text=f"PLAYER: {puntaje_player}",fg="white",bg="green")
+            self.mostrar_player_puntaje.grid(row=0,column=0)
+            puntaje_bot = sum(valor == 1 for valor in self.juego.tablero)
+            self.mostrar_bot_puntaje = Label(self.principal,text=f"BOT: {puntaje_bot}",fg="white",bg="green")
+            self.mostrar_bot_puntaje.grid(row=0,column=2)
+            self.principal.update()
             print(self.juego.tablero)
             
             
@@ -148,8 +167,9 @@ class Gato:
                 print(len(o))
                 self.juego.jugar(m[1])
                 self.botones[m[1]//3][m[1]%3]["image"]=self.bot
-                self.principal.update()
                 self.victoria(size_tablero)
+                self.principal.update()
+        
 
         
 
