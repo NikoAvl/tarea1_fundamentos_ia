@@ -10,6 +10,8 @@ class Gato:
         self.ventana.title("Menu Principal")
         self.ventana.geometry("800x400+0+0")
         self.ventana.minsize(800,400)
+        self.ventana.maxsize(800,400)
+        self.ventana.resizable(False,False)
 
         #Imagen de fondo 
         imagen_fondo = PhotoImage(file="fondo.png")
@@ -61,13 +63,16 @@ class Gato:
         self.level.title("Dificultad")
         self.level.geometry("200x300+0+0")
         self.level.minsize(200,300)
+        self.level.maxsize(200,300)
+        self.level.resizable(False,False)
+        
 
         # Obtener el ancho y alto de la pantalla
         self.ancho_pantalla = self.level.winfo_screenwidth()
         self.alto_pantalla = self.level.winfo_screenheight()
 
         # Calcular las coordenadas para centrar la ventana
-        x = (self.ancho_pantalla - self.level.winfo_reqwidth()) / 3.8
+        x = (self.ancho_pantalla - self.level.winfo_reqwidth()) / 2
         y = (self.alto_pantalla - self.level.winfo_reqheight()) / 3.8
         # Establecer la ubicación de la ventana centrada
         self.level.geometry("+%d+%d" % (x, y))
@@ -79,15 +84,15 @@ class Gato:
 
         boton1 = Button(self.level,text="",command=lambda: self.Jugar(size_tablero,dificultad="facil"),width=128,height=48, image=image_boton_facil,borderwidth=0)
         boton1.pack(side=TOP)
-        boton1.place(x=30,y=10)
+        boton1.place(x=30,y=60)
 
         boton2 = Button(self.level,text="",command=lambda: self.Jugar(size_tablero,dificultad="medio"),width=128,height=48, image=image_boton_medio,borderwidth=0)
         boton2.pack(side=TOP)
-        boton2.place(x=30,y=80)
+        boton2.place(x=30,y=130)
 
         boton3 = Button(self.level,text="",command=lambda: self.Jugar(size_tablero,dificultad="dificil"),width=128,height=48, image=image_boton_dificil,borderwidth=0)
         boton3.pack(side=TOP)
-        boton3.place(x=30,y=150)
+        boton3.place(x=30,y=200)
 
         mainloop()
 
@@ -97,7 +102,6 @@ class Gato:
         
         self.level.destroy()
         
-
         self.principal = Tk()
         self.principal.configure(bg="green")
         self.principal.title("Reversi")
@@ -106,6 +110,7 @@ class Gato:
         self.raton=PhotoImage(file="player.png")
         self.vacio=PhotoImage(file="vacio.gif")
         self.juego=aisearch.JuegoGato(size_tablero)
+        self.principal.resizable(False,False)
         
         
 
