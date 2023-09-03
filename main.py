@@ -31,10 +31,19 @@ class Gato:
         self.menubar = Menu(self.ventana)
         self.ventana.config(menu= self.menubar)
         self.ventana.config(bg= "#ECECEC")
-        self.boton1 = Button(self.ventana,text="Jogar",command=self.Jugar)
-        self.boton1.pack(side=TOP)
 
-        self.ventana.mainloop()
+        #BOTONES
+
+            #BOTONES --> IMAGEN BOTONES
+        image_boton_jugar = PhotoImage(file="boton_jugar.png")
+        
+            #BOTONES --> CREAR BOTONES
+        self.boton1 = Button(self.ventana,text="Jogar",command=self.Jugar,width=128,height=48, image=image_boton_jugar,borderwidth=0)
+        self.boton1.pack(side=TOP)
+        self.boton1.place(x=47,y=100)
+        
+        mainloop()
+
 
         
 
@@ -114,4 +123,4 @@ class Gato:
     
 
 juego=Gato()
-mainloop()
+
