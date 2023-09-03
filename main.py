@@ -39,11 +39,11 @@ class Gato:
         image_boton_jugar_6x6 = PhotoImage(file="boton_jugar_6x6.png")
         image_boton_jugar_8x8 = PhotoImage(file="boton_jugar_8x8.png")
             #BOTONES --> CREAR BOTONES
-        self.boton1 = Button(self.ventana,text="Jogar",command=lambda: self.Jugar(6),width=128,height=48, image=image_boton_jugar_6x6,borderwidth=0)
+        self.boton1 = Button(self.ventana,text="Jogar",command=lambda: self.Dificultad(6),width=128,height=48, image=image_boton_jugar_6x6,borderwidth=0)
         self.boton1.pack(side=TOP)
         self.boton1.place(x=47,y=100)
 
-        self.boton2 = Button(self.ventana,text="Jogar",command=lambda: self.Jugar(8),width=128,height=48, image=image_boton_jugar_8x8,borderwidth=0)
+        self.boton2 = Button(self.ventana,text="Jogar",command=lambda: self.Dificultad(8),width=128,height=48, image=image_boton_jugar_8x8,borderwidth=0)
         self.boton2.pack(side=TOP)
         self.boton2.place(x=47,y=200)
         
@@ -53,12 +53,51 @@ class Gato:
         
 
 
+    def Dificultad(self,size_tablero):
+        self.ventana.destroy()
+        #NIVEL DE DIFICULTAD
+        self.level = Tk()
+        self.level.config(bg="green")
+        self.level.title("Dificultad")
+        self.level.geometry("200x300+0+0")
+        self.level.minsize(200,300)
 
+        # Obtener el ancho y alto de la pantalla
+        self.ancho_pantalla = self.level.winfo_screenwidth()
+        self.alto_pantalla = self.level.winfo_screenheight()
 
-    def Jugar(self,size_tablero):
+        # Calcular las coordenadas para centrar la ventana
+        x = (self.ancho_pantalla - self.level.winfo_reqwidth()) / 3.8
+        y = (self.alto_pantalla - self.level.winfo_reqheight()) / 3.8
+        # Establecer la ubicación de la ventana centrada
+        self.level.geometry("+%d+%d" % (x, y))
+
+           #BOTONES --> IMAGEN BOTONES
+        image_boton_facil = PhotoImage(file="boton_facil.png")
+        image_boton_medio = PhotoImage(file="boton_medio.png")
+        image_boton_dificil = PhotoImage(file="boton_dificil.png")
+
+        boton1 = Button(self.level,text="",command=lambda: self.Jugar(size_tablero,dificultad="facil"),width=128,height=48, image=image_boton_facil,borderwidth=0)
+        boton1.pack(side=TOP)
+        boton1.place(x=30,y=10)
+
+        boton2 = Button(self.level,text="",command=lambda: self.Jugar(size_tablero,dificultad="medio"),width=128,height=48, image=image_boton_medio,borderwidth=0)
+        boton2.pack(side=TOP)
+        boton2.place(x=30,y=80)
+
+        boton3 = Button(self.level,text="",command=lambda: self.Jugar(size_tablero,dificultad="dificil"),width=128,height=48, image=image_boton_dificil,borderwidth=0)
+        boton3.pack(side=TOP)
+        boton3.place(x=30,y=150)
+
+        mainloop()
+
+    def Jugar(self,size_tablero,dificultad):
     #VENTANA DE JUEGO
         
-        self.ventana.destroy()
+        
+        self.level.destroy()
+        
+
         self.principal = Tk()
         self.principal.configure(bg="green")
         self.principal.title("Reversi")
