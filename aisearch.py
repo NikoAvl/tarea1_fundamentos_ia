@@ -1,19 +1,25 @@
+
 class JuegoGato:
   #Comienza el raton, valor=-1
-  def __init__(self,estado=[0]*36,turno=-1):
+  def __init__(self,size_tablero,estado=None,turno=-1):
+    
+    self.size_tablero = size_tablero
+    
+    if estado is None:
+      estado = [0]*(self.size_tablero**2)
     self.tablero=estado
     self.completo=False
     self.ganador=None
     self.jugador=turno
 
   def reiniciar(self):
-    self.tablero=[0]*36
+    self.tablero=[0]*(self.size_tablero**2)
     self.completo=False
     self.ganador=None
     self.jugador=-1
 
   def generar_jugadas_posibles(self):
-    return [i for i in range(36)]
+    return [i for i in range(self.size_tablero**2)]
 
   def estado_final(self):
     self.evaluar()
