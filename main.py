@@ -61,10 +61,10 @@ class Gato:
         self.ventana.destroy()
         
         self.principal = Tk()
-        self.principal.title("Gato")
+        self.principal.title("Reversi")
         self.botones=[]
-        self.gato=PhotoImage(file="gato.gif")
-        self.raton=PhotoImage(file="raton.gif")
+        self.bot=PhotoImage(file="bot.png")
+        self.raton=PhotoImage(file="player.png")
         self.vacio=PhotoImage(file="vacio.gif")
         self.juego=aisearch.JuegoGato(size_tablero)
         
@@ -91,7 +91,30 @@ class Gato:
                 b1.grid(row=i,column=j)
                 fila.append(b1)
             self.botones.append(fila)
+
+        fila_centro = size_tablero // 2 - 1  # Restar 1 porque las listas comienzan desde 0
+        columna_centro = size_tablero // 2 - 1
+
+            # Convertir coordenadas a índices y colocar fichas en el centro
+        self.indice_1 = self.convertir_coordenadas_a_indice(fila_centro, columna_centro,size_tablero)
+        self.indice_2 = self.convertir_coordenadas_a_indice(fila_centro, columna_centro + 1,size_tablero)
+        self.indice_3 = self.convertir_coordenadas_a_indice(fila_centro + 1, columna_centro,size_tablero)
+        self.indice_4 = self.convertir_coordenadas_a_indice(fila_centro + 1, columna_centro + 1,size_tablero)
+        self.juego.tablero[self.indice_1] = 1  # Jugador 1
+        self.juego.tablero[self.indice_2] = -1  # Jugador 2
+        self.juego.tablero[self.indice_3] = -1  # Jugador 2
+        self.juego.tablero[self.indice_4] = 1  # Jugador 1
+        print(self.botones)
+        self.botones[fila_centro][columna_centro].config(image = self.raton)
+        self.botones[fila_centro+1][columna_centro+1].config(image = self.raton)
+        self.botones[fila_centro+1][columna_centro].config(image = self.bot)
+        self.botones[fila_centro][columna_centro+1].config(image = self.bot)
         
+    
+    def convertir_coordenadas_a_indice(self, fila, columna,size_tablero):
+        # Convertir coordenadas 2D en índice 1D
+        return fila * size_tablero + columna
+
     def victoria(self,size_tablero):
         if self.juego.estado_final():
             if self.juego.ganador == -1:
@@ -113,6 +136,9 @@ class Gato:
         if self.juego.tablero[evento.widget.x * size_tablero + evento.widget.y]==0:
             self.juego.jugar(evento.widget.x * size_tablero + evento.widget.y)
             evento.widget["image"] = self.raton
+            print(self.juego.tablero)
+            
+            
             self.principal.update()
             if not self.victoria(size_tablero):
                 o=[]
@@ -122,7 +148,7 @@ class Gato:
                 #m=aisearch.negamax(self.juego,[],o)
                 print(len(o))
                 self.juego.jugar(m[1])
-                self.botones[m[1]//3][m[1]%3]["image"]=self.gato
+                self.botones[m[1]//3][m[1]%3]["image"]=self.bot
                 self.principal.update()
                 self.victoria(size_tablero)
 

@@ -1,4 +1,4 @@
-
+import random
 class JuegoGato:
   #Comienza el raton, valor=-1
   def __init__(self,size_tablero,estado=None,turno=-1):
@@ -12,11 +12,18 @@ class JuegoGato:
     self.ganador=None
     self.jugador=turno
 
+    
+    
+  
+  
+
   def reiniciar(self):
     self.tablero=[0]*(self.size_tablero**2)
     self.completo=False
     self.ganador=None
     self.jugador=-1
+
+  
 
   def generar_jugadas_posibles(self):
     return [i for i in range(self.size_tablero**2)]
@@ -74,7 +81,7 @@ if __name__ == "__main__":
   # x |   |  
   #   | O | 
   # O | X | O
-  juego=JuegoGato([1,0,0,0,-1,0,-1,1,-1],1)
+  juego=JuegoGato(estado=[1,0,0,0,-1,0,-1,1,-1],turno=1)
   o1=[]
   o2=[]
   o3=[]
