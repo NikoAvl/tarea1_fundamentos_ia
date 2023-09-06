@@ -38,8 +38,8 @@ class Gato:
         #BOTONES
 
             #BOTONES --> IMAGEN BOTONES
-        image_boton_jugar_6x6 = PhotoImage(file="boton_jugar_6x6.png")
-        image_boton_jugar_8x8 = PhotoImage(file="boton_jugar_8x8.png")
+        image_boton_jugar_6x6 = PhotoImage(file="jugar_6x6.png")
+        image_boton_jugar_8x8 = PhotoImage(file="jugar_8x8.png")
             #BOTONES --> CREAR BOTONES
         self.boton1 = Button(self.ventana,text="Jogar",command=lambda: self.Dificultad(6),width=128,height=48, image=image_boton_jugar_6x6,borderwidth=0)
         self.boton1.pack(side=TOP)
@@ -78,9 +78,9 @@ class Gato:
         self.level.geometry("+%d+%d" % (x, y))
 
            #BOTONES --> IMAGEN BOTONES
-        image_boton_facil = PhotoImage(file="boton_facil.png")
-        image_boton_medio = PhotoImage(file="boton_medio.png")
-        image_boton_dificil = PhotoImage(file="boton_dificil.png")
+        image_boton_facil = PhotoImage(file="facil.png")
+        image_boton_medio = PhotoImage(file="medio.png")
+        image_boton_dificil = PhotoImage(file="dificil.png")
 
         boton1 = Button(self.level,text="",command=lambda: self.Jugar(size_tablero,dificultad="facil"),width=128,height=48, image=image_boton_facil,borderwidth=0)
         boton1.pack(side=TOP)
