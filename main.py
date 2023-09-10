@@ -142,6 +142,10 @@ class Reversi:
     self.juego = aisearch.JuegoReversi(size_tablero)
     self.principal.resizable(False, False)
 
+    #creo un boton de reinicio
+    reiniciar_boton = Button(self.principal, text="Reiniciar", command=lambda: self.reiniciar_partida(size_tablero))
+    reiniciar_boton.grid(row=0, column=1) 
+
     # Obtener el ancho y alto de la pantalla
     self.ancho_pantalla = self.principal.winfo_screenwidth()
     self.alto_pantalla = self.principal.winfo_screenheight()
@@ -193,7 +197,25 @@ class Reversi:
                                      fg="white",
                                      bg="green")
     self.mostrar_bot_puntaje.grid(row=0, column=2)
-
+  def reiniciar_partida(self, size_tablero):
+    self.juego.reiniciar()  # Reinicia el juego
+    # Limpia el tablero
+    for fila in self.botones:
+        for boton in fila:
+            boton.config(image=self.vacio)
+    # Restablece las fichas iniciales
+    fila_centro = size_tablero // 2 - 1
+    columna_centro = size_tablero // 2 - 1
+    self.juego.tablero[fila_centro][columna_centro] = 1
+    self.juego.tablero[fila_centro][columna_centro + 1] = -1
+    self.juego.tablero[fila_centro + 1][columna_centro] = -1
+    self.juego.tablero[fila_centro + 1][columna_centro + 1] = 1
+    self.botones[fila_centro][columna_centro].config(image=self.raton)
+    self.botones[fila_centro + 1][columna_centro + 1].config(image=self.raton)
+    self.botones[fila_centro + 1][columna_centro].config(image=self.bot)
+    self.botones[fila_centro][columna_centro + 1].config(image=self.bot)
+    # Actualiza la pantalla
+    self.principal.update()
 
 
   def victoria(self, size_tablero):
