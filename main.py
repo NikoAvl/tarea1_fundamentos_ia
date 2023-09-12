@@ -143,8 +143,8 @@ class Reversi:
     self.principal.resizable(False, False)
 
     #creo un boton de reinicio
-    reiniciar_boton = Button(self.principal, text="Reiniciar", command=lambda: self.reiniciar_partida(size_tablero))
-    reiniciar_boton.grid(row=0, column=1) 
+    reiniciar_boton = Button(self.principal, text="Reiniciar", command=lambda: self.reiniciar_partida(size_tablero),bg="blue",fg="white")
+    reiniciar_boton.grid(row=0, column=5) 
 
     # Obtener el ancho y alto de la pantalla
     self.ancho_pantalla = self.principal.winfo_screenwidth()
@@ -197,6 +197,7 @@ class Reversi:
                                      fg="white",
                                      bg="green")
     self.mostrar_bot_puntaje.grid(row=0, column=2)
+  
   def reiniciar_partida(self, size_tablero):
     self.juego.reiniciar()  # Reinicia el juego
     # Limpia el tablero
