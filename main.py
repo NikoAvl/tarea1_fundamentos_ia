@@ -142,6 +142,8 @@ class Reversi:
     self.juego = aisearch.JuegoReversi(size_tablero)
     self.principal.resizable(False, False)
 
+    
+
     #creo un boton de reinicio
     reiniciar_boton = Button(self.principal, text="Reiniciar", command=lambda: self.reiniciar_partida(size_tablero),bg="blue",fg="white")
     reiniciar_boton.grid(row=0, column=5) 
@@ -184,19 +186,6 @@ class Reversi:
     self.botones[fila_centro + 1][columna_centro].config(image=self.bot)
     self.botones[fila_centro][columna_centro + 1].config(image=self.bot)
 
-    #PUNTAJE JUGADORES
-    puntaje_player = sum(valor == -1 for valor in self.juego.tablero)
-    self.mostrar_player_puntaje = Label(self.principal,
-                                        text=f"PLAYER: {puntaje_player}",
-                                        fg="white",
-                                        bg="green")
-    self.mostrar_player_puntaje.grid(row=0, column=0)
-    puntaje_bot = sum(valor == 1 for valor in self.juego.tablero)
-    self.mostrar_bot_puntaje = Label(self.principal,
-                                     text=f"BOT: {puntaje_bot}",
-                                     fg="white",
-                                     bg="green")
-    self.mostrar_bot_puntaje.grid(row=0, column=2)
   
   def reiniciar_partida(self, size_tablero):
     self.juego.reiniciar()  # Reinicia el juego
@@ -247,20 +236,7 @@ class Reversi:
       self.botones[fila_centro + 1][columna_centro].config(image=self.bot)
       self.botones[fila_centro][columna_centro + 1].config(image=self.bot)
 
-
-      #PUNTAJE JUGADORES
-      puntaje_player = sum(valor == -1 for valor in self.juego.tablero)
-      self.mostrar_player_puntaje = Label(self.principal,
-                                          text=f"PLAYER: {puntaje_player}",
-                                          fg="white",
-                                          bg="green")
-      self.mostrar_player_puntaje.grid(row=0, column=0)
-      puntaje_bot = sum(valor == 1 for valor in self.juego.tablero)
-      self.mostrar_bot_puntaje = Label(self.principal,
-                                       text=f"BOT: {puntaje_bot}",
-                                       fg="white",
-                                       bg="green")
-      self.mostrar_bot_puntaje.grid(row=0, column=2)
+  
 
       return True
     else:
@@ -269,56 +245,57 @@ class Reversi:
   
 
   def click(self, evento, size_tablero):
-    
-    
+    jugador = -1
+    movimientos_posibles = True
     
     if self.juego.tablero[evento.widget.x][evento.widget.y] == 0:
       print("aqui si")
-      if self.juego.movimiento_valido(self.juego.tablero, evento.widget.x, evento.widget.y, -1):
+      if jugador == -1:
         print("hola")
-        self.juego.jugar(evento.widget.x, evento.widget.y)
+        fila = evento.widget.x
+        columna = evento.widget.y
         
-        evento.widget["image"] = self.raton
-        puntaje_player = sum(valor == -1 for valor in self.juego.tablero)
-        self.mostrar_player_puntaje = Label(self.principal,
-                                            text=f"PLAYER: {puntaje_player}",
-                                            fg="white",
-                                            bg="green")
-        self.mostrar_player_puntaje.grid(row=0, column=0)
-        puntaje_bot = sum(valor == 1 for valor in self.juego.tablero)
-        self.mostrar_bot_puntaje = Label(self.principal,
-                                        text=f"BOT: {puntaje_bot}",
-                                        fg="white",
-                                        bg="green")
-        self.mostrar_bot_puntaje.grid(row=0, column=2)
-        self.principal.update()
-        print(self.juego.tablero)
+        if self.juego.movimiento_valido(self.juego.tablero,fila,columna,jugador):
+        
+          self.juego.realizar_movimiento(self.juego.tablero,fila,columna,jugador)
+          jugador = 1
+          movimientos_posibles = True
+          
+          
 
-        self.principal.update()
-      if not self.victoria(size_tablero):
-        o = []
-        #m=aisearch.negascout(self.juego,-1000,1000, [], o)
-        #m=aisearch.alfabeta(self.juego,1,-1000,1000, [], o)
-        valor, movimiento = self.juego.minimax(self.juego.tablero, 1, 4)
-        #m=aisearch.negamax(self.juego,[],o)
-        if movimiento:
-          self.juego.realizar_movimiento(self.juego.tablero, movimiento[0], movimiento[1], 1)
-        
-        
-          print(len(o))
-          self.juego.jugar( movimiento[0],movimiento[1])
-          self.botones[movimiento[0]][movimiento[1]]["image"] = self.bot
-          self.victoria(size_tablero)
           self.principal.update()
+          print(self.juego.tablero)
+
+          self.principal.update()
+          
+      if jugador == 1:
+        movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,jugador)
+
+        if movimientos_validos:
+          valor,movimiento = self.juego.minimax(self.juego.tablero,jugador,profundidad=4)
+          if movimiento:
+            self.juego.realizar_movimiento(self.juego.tablero,movimiento[0],movimiento[1],jugador)
+            jugador = -1
+            movimientos_posibles = True
+    
+    if not movimientos_posibles:
+      jugador = -1 if jugador == 1 else 1
+      movimientos_posibles = True
+
+
     
     for fila,ilera in enumerate(self.juego.tablero):
       for columna,casilla in enumerate(ilera):
-        if casilla == 1:
-          self.botones[fila][columna].config(image=self.bot)
-        
-        elif casilla == -1:
+        if casilla == -1:
           self.botones[fila][columna].config(image=self.raton)
+          self.principal.update()
+        elif casilla == 1:
+          self.botones[fila][columna].config(image=self.bot)
+    
     self.principal.update()
+          
+        
+    
           
 
 

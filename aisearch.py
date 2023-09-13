@@ -126,11 +126,16 @@ class JuegoReversi:
     return True  
   
   
+  def contar_fichas(self, tablero):
+    contador_player = sum(row.count(-1) for row in tablero)
+    contador_bot = sum(row.count(1) for row in tablero)
+    return contador_player, contador_bot
+  
     
   def puntuacion(self, tablero):
-    puntuacion_X = sum(row.count(-1) for row in tablero)
-    puntuacion_O = sum(row.count(1) for row in tablero)
-    return puntuacion_X - puntuacion_O
+    puntuacion_player = sum(row.count(-1) for row in tablero)
+    puntuacion_bot = sum(row.count(1) for row in tablero)
+    return puntuacion_player - puntuacion_bot
 
   def obtener_movimientos_validos(self,tablero, jugador):
       movimientos_validos = []
