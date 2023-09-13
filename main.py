@@ -181,10 +181,10 @@ class Reversi:
     self.juego.tablero[fila_centro][columna_centro+1] = -1  # Jugador 2
     self.juego.tablero[fila_centro+1][columna_centro] = -1  # Jugador 2
     self.juego.tablero[fila_centro+1][columna_centro+1] = 1  # Jugador 1
-    self.botones[fila_centro][columna_centro].config(image=self.raton)
-    self.botones[fila_centro + 1][columna_centro + 1].config(image=self.raton)
-    self.botones[fila_centro + 1][columna_centro].config(image=self.bot)
-    self.botones[fila_centro][columna_centro + 1].config(image=self.bot)
+    self.botones[fila_centro][columna_centro].config(image=self.bot)
+    self.botones[fila_centro + 1][columna_centro + 1].config(image=self.bot)
+    self.botones[fila_centro + 1][columna_centro].config(image=self.raton)
+    self.botones[fila_centro][columna_centro + 1].config(image=self.raton)
 
   
   def reiniciar_partida(self, size_tablero):
@@ -196,14 +196,14 @@ class Reversi:
     # Restablece las fichas iniciales
     fila_centro = size_tablero // 2 - 1
     columna_centro = size_tablero // 2 - 1
-    self.juego.tablero[fila_centro][columna_centro] = 1
-    self.juego.tablero[fila_centro][columna_centro + 1] = -1
-    self.juego.tablero[fila_centro + 1][columna_centro] = -1
-    self.juego.tablero[fila_centro + 1][columna_centro + 1] = 1
-    self.botones[fila_centro][columna_centro].config(image=self.raton)
-    self.botones[fila_centro + 1][columna_centro + 1].config(image=self.raton)
-    self.botones[fila_centro + 1][columna_centro].config(image=self.bot)
-    self.botones[fila_centro][columna_centro + 1].config(image=self.bot)
+    self.juego.tablero[fila_centro][columna_centro] = 1  # Jugador 1
+    self.juego.tablero[fila_centro][columna_centro+1] = -1  # Jugador 2
+    self.juego.tablero[fila_centro+1][columna_centro] = -1  # Jugador 2
+    self.juego.tablero[fila_centro+1][columna_centro+1] = 1  # Jugador 1
+    self.botones[fila_centro][columna_centro].config(image=self.bot)
+    self.botones[fila_centro + 1][columna_centro + 1].config(image=self.bot)
+    self.botones[fila_centro + 1][columna_centro].config(image=self.raton)
+    self.botones[fila_centro][columna_centro + 1].config(image=self.raton)
     # Actualiza la pantalla
     self.principal.update()
 
@@ -231,10 +231,10 @@ class Reversi:
       self.juego.tablero[fila_centro][columna_centro+1] = -1  # Jugador 2
       self.juego.tablero[fila_centro+1][columna_centro] = -1  # Jugador 2
       self.juego.tablero[fila_centro+1][columna_centro+1] = 1  # Jugador 1
-      self.botones[fila_centro][columna_centro].config(image=self.raton)
-      self.botones[fila_centro + 1][columna_centro + 1].config(image=self.raton)
-      self.botones[fila_centro + 1][columna_centro].config(image=self.bot)
-      self.botones[fila_centro][columna_centro + 1].config(image=self.bot)
+      self.botones[fila_centro][columna_centro].config(image=self.bot)
+      self.botones[fila_centro + 1][columna_centro + 1].config(image=self.bot)
+      self.botones[fila_centro + 1][columna_centro].config(image=self.raton)
+      self.botones[fila_centro][columna_centro + 1].config(image=self.raton)
 
   
 
@@ -260,7 +260,7 @@ class Reversi:
           self.juego.realizar_movimiento(self.juego.tablero,fila,columna,jugador)
           jugador = 1
           movimientos_posibles = True
-          
+
           
 
           self.principal.update()
@@ -269,6 +269,7 @@ class Reversi:
           self.principal.update()
           
       if jugador == 1:
+        
         movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,jugador)
 
         if movimientos_validos:
@@ -277,7 +278,7 @@ class Reversi:
             self.juego.realizar_movimiento(self.juego.tablero,movimiento[0],movimiento[1],jugador)
             jugador = -1
             movimientos_posibles = True
-    
+            
     if not movimientos_posibles:
       jugador = -1 if jugador == 1 else 1
       movimientos_posibles = True
