@@ -208,6 +208,20 @@ class Reversi:
     label_puntaje_player.grid(row=0,column=0)
     label_puntaje_bot.grid(row=0,column=1)
     
+    #BOTON PARA AYUDAR AL PLAYER
+    self.imagen_ayuda_jugador = PhotoImage(file="vacio_movimiento_posible.gif")
+    solicitar_ayuda = Button(self.principal, text="ayuda", command=lambda: self.ayudar_player(),bg="blue",fg="white")
+    solicitar_ayuda.grid(row=0, column=4)
+    
+    
+  def ayudar_player(self):
+    try:
+      valor,movimiento = self.juego.minimax(self.juego.tablero,-1,profundidad=4)
+      self.botones[movimiento[0]][movimiento[1]].config(image=self.imagen_ayuda_jugador)
+    except:
+      messagebox.showinfo("No se ha encontrado ningun movimiento posible!")
+    
+    
   
   def reiniciar_partida(self, size_tablero):
     self.juego.reiniciar()  # Reinicia el juego
@@ -279,7 +293,9 @@ class Reversi:
               if casilla == -1:
                 self.botones[fila][columna].config(image=self.raton)
                 self.principal.update()
-              
+              if casilla == -0:
+                self.botones[fila][columna].config(image=self.vacio)
+                self.principal.update()
 
 
           self.principal.update()
