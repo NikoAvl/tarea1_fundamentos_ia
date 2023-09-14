@@ -15,6 +15,7 @@ class Reversi:
     self.ventana.resizable(False, False)
     self.jugador = -1 #se define el jugador que partira jugando (-1 player, 1 bot)
     self.movimientos_posibles = True
+    self.elegir_dificultad = 0 #variable a utilizar para definir la dificultad (profundidad minimax)
 
     #Imagen de fondo
     imagen_fondo = PhotoImage(file="fondo.png")
@@ -131,6 +132,13 @@ class Reversi:
 
   def Jugar(self, size_tablero, dificultad):
     #VENTANA DE JUEGO
+    if dificultad == "facil":
+      self.elegir_dificultad = 2
+    elif dificultad == "medio":
+      self.elegir_dificultad = 3
+    elif dificultad == "dificil":
+      self.elegir_dificultad = 4
+    
 
     self.level.destroy()
 
@@ -282,7 +290,7 @@ class Reversi:
         movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,self.jugador)
 
         if movimientos_validos:
-          valor,movimiento = self.juego.minimax(self.juego.tablero,self.jugador,profundidad=4)
+          valor,movimiento = self.juego.minimax(self.juego.tablero,self.jugador,profundidad=self.elegir_dificultad)
           if movimiento:
             self.juego.realizar_movimiento(self.juego.tablero,movimiento[0],movimiento[1],self.jugador)
             self.jugador = -1
