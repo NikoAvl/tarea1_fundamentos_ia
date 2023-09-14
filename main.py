@@ -13,6 +13,8 @@ class Reversi:
     self.ventana.minsize(800, 400)
     self.ventana.maxsize(800, 400)
     self.ventana.resizable(False, False)
+    self.jugador = -1 #se define el jugador que partira jugando (-1 player, 1 bot)
+    self.movimientos_posibles = True
 
     #Imagen de fondo
     imagen_fondo = PhotoImage(file="fondo.png")
@@ -163,6 +165,9 @@ class Reversi:
       fila = []
       for j in range(size_tablero):
         b1 = Button(self.principal, image=self.vacio, width="60", height="60")
+        
+        
+        
         b1.bind("<Button-1>",
                 lambda event, size_tablero=size_tablero: self.click(
                     event, size_tablero))
@@ -186,6 +191,15 @@ class Reversi:
     self.botones[fila_centro + 1][columna_centro].config(image=self.raton)
     self.botones[fila_centro][columna_centro + 1].config(image=self.raton)
 
+    #mostrar puntaje
+    contador_player, contador_bot = self.juego.contar_fichas(self.juego.tablero)
+
+      
+    label_puntaje_player = Label(self.principal,text=f"player: {contador_player}",bg="green",fg="red")  
+    label_puntaje_bot = Label(self.principal,text=f"bot: {contador_bot}",bg="green",fg="blue")  
+    label_puntaje_player.grid(row=0,column=0)
+    label_puntaje_bot.grid(row=0,column=1)
+    
   
   def reiniciar_partida(self, size_tablero):
     self.juego.reiniciar()  # Reinicia el juego
@@ -245,21 +259,20 @@ class Reversi:
   
 
   def click(self, evento, size_tablero):
-    jugador = -1
-    movimientos_posibles = True
+    self.movimientos_posibles = True
     
     if self.juego.tablero[evento.widget.x][evento.widget.y] == 0:
       print("aqui si")
-      if jugador == -1:
+      if self.jugador == -1:
         print("hola")
         fila = evento.widget.x
         columna = evento.widget.y
         
-        if self.juego.movimiento_valido(self.juego.tablero,fila,columna,jugador):
+        if self.juego.movimiento_valido(self.juego.tablero,fila,columna,self.jugador):
         
-          self.juego.realizar_movimiento(self.juego.tablero,fila,columna,jugador)
-          jugador = 1
-          movimientos_posibles = True
+          self.juego.realizar_movimiento(self.juego.tablero,fila,columna,self.jugador)
+          self.jugador = 1
+          self.movimientos_posibles = True
 
           
 
@@ -277,16 +290,16 @@ class Reversi:
           self.principal.update()
           
           
-      if jugador == 1:
+      if self.jugador == 1:
         
-        movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,jugador)
+        movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,self.jugador)
 
         if movimientos_validos:
-          valor,movimiento = self.juego.minimax(self.juego.tablero,jugador,profundidad=4)
+          valor,movimiento = self.juego.minimax(self.juego.tablero,self.jugador,profundidad=4)
           if movimiento:
-            self.juego.realizar_movimiento(self.juego.tablero,movimiento[0],movimiento[1],jugador)
-            jugador = -1
-            movimientos_posibles = True
+            self.juego.realizar_movimiento(self.juego.tablero,movimiento[0],movimiento[1],self.jugador)
+            self.jugador = -1
+            self.movimientos_posibles = True
             
             time.sleep(1)
             for fila,ilera in enumerate(self.juego.tablero):
@@ -299,10 +312,18 @@ class Reversi:
     
     self.principal.update()
             
-    if not movimientos_posibles:
-      jugador = -1 if jugador == 1 else 1
-      movimientos_posibles = True
+    if not self.movimientos_posibles:
+      self.jugador = -1 if self.jugador == 1 else 1
+      self.movimientos_posibles = True
 
+    contador_player, contador_bot = self.juego.contar_fichas(self.juego.tablero)
+
+      
+    label_puntaje_player = Label(self.principal,text=f"player: {contador_player}",bg="green",fg="red")  
+    label_puntaje_bot = Label(self.principal,text=f"bot: {contador_bot}",bg="green",fg="blue")  
+    label_puntaje_player.grid(row=0,column=0)
+    label_puntaje_bot.grid(row=0,column=1)
+    
     
     self.principal.update()
           
