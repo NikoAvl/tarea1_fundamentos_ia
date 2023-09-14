@@ -204,22 +204,9 @@ class Reversi:
   def reiniciar_partida(self, size_tablero):
     self.juego.reiniciar()  # Reinicia el juego
     # Limpia el tablero
-    for fila in self.botones:
-        for boton in fila:
-            boton.config(image=self.vacio)
-    # Restablece las fichas iniciales
-    fila_centro = size_tablero // 2 - 1
-    columna_centro = size_tablero // 2 - 1
-    self.juego.tablero[fila_centro][columna_centro] = 1  # Jugador 1
-    self.juego.tablero[fila_centro][columna_centro+1] = -1  # Jugador 2
-    self.juego.tablero[fila_centro+1][columna_centro] = -1  # Jugador 2
-    self.juego.tablero[fila_centro+1][columna_centro+1] = 1  # Jugador 1
-    self.botones[fila_centro][columna_centro].config(image=self.bot)
-    self.botones[fila_centro + 1][columna_centro + 1].config(image=self.bot)
-    self.botones[fila_centro + 1][columna_centro].config(image=self.raton)
-    self.botones[fila_centro][columna_centro + 1].config(image=self.raton)
-    # Actualiza la pantalla
-    self.principal.update()
+    self.principal.destroy()
+    nueva_partida = Reversi()
+    
 
 
   def victoria(self, size_tablero):
