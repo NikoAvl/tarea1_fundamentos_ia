@@ -155,7 +155,7 @@ class Reversi:
     
 
     #creo un boton de reinicio
-    reiniciar_boton = Button(self.principal, text="Reiniciar", command=lambda: self.reiniciar_partida(size_tablero),bg="blue",fg="white")
+    reiniciar_boton = Button(self.principal, text="Reiniciar", command=lambda: self.reiniciar_partida(),bg="blue",fg="white")
     reiniciar_boton.grid(row=0, column=5) 
 
     # Obtener el ancho y alto de la pantalla
@@ -174,11 +174,10 @@ class Reversi:
       for j in range(size_tablero):
         b1 = Button(self.principal, image=self.vacio, width="60", height="60")
         
-        
-        
         b1.bind("<Button-1>",
                 lambda event, size_tablero=size_tablero: self.click(
                     event, size_tablero))
+        
         b1.x = i
         b1.y = j
         b1.grid(row=i + 1, column=j)
@@ -223,7 +222,7 @@ class Reversi:
     
     
   
-  def reiniciar_partida(self, size_tablero):
+  def reiniciar_partida(self):
     self.juego.reiniciar()  # Reinicia el juego
     # Limpia el tablero
     self.principal.destroy()
@@ -231,39 +230,16 @@ class Reversi:
     
 
 
-  def victoria(self, size_tablero):
-    if self.juego.estado_final():
-      if self.juego.ganador == -1:
-        messagebox.showinfo("Juego del Gato", "Has ganado!")
-      elif self.juego.ganador == 0:
-        messagebox.showinfo("Juego del Gato", "Empate")
-      else:
-        messagebox.showinfo("Juego del Gato", "Has perdido")
-      self.juego.reiniciar()
+  def victoria(self):
+    contador_player, contador_bot = self.juego.contar_fichas(self.juego.tablero)
 
-      for i in range(size_tablero):
-        for j in range(size_tablero):
-          self.botones[i][j]["image"] = self.vacio
-
-      fila_centro = size_tablero // 2 - 1  # Restar 1 porque las listas comienzan desde 0
-      columna_centro = size_tablero // 2 - 1
-
-      # Colocar fichas iniciales al centro
-
-      self.juego.tablero[fila_centro][columna_centro] = 1  # Jugador 1
-      self.juego.tablero[fila_centro][columna_centro+1] = -1  # Jugador 2
-      self.juego.tablero[fila_centro+1][columna_centro] = -1  # Jugador 2
-      self.juego.tablero[fila_centro+1][columna_centro+1] = 1  # Jugador 1
-      self.botones[fila_centro][columna_centro].config(image=self.bot)
-      self.botones[fila_centro + 1][columna_centro + 1].config(image=self.bot)
-      self.botones[fila_centro + 1][columna_centro].config(image=self.raton)
-      self.botones[fila_centro][columna_centro + 1].config(image=self.raton)
-
-  
-
-      return True
+    if contador_player > contador_bot:
+      messagebox.showinfo(message="GANASTE!",title="Ganador")
+              
+    elif contador_bot > contador_player:
+      messagebox.showinfo(message="Perdiste :c",title="Ganador")
     else:
-      return False
+      messagebox.showinfo(message="Empate...",title="Ganador")
   
   
 
@@ -300,32 +276,52 @@ class Reversi:
 
           self.principal.update()
           
+      while True:
+        if self.jugador == 1:
           
-      if self.jugador == 1:
-        
-        movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,self.jugador)
+          movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,self.jugador)
 
-        if movimientos_validos:
-          valor,movimiento = self.juego.minimax(self.juego.tablero,self.jugador,profundidad=self.elegir_dificultad)
-          if movimiento:
-            self.juego.realizar_movimiento(self.juego.tablero,movimiento[0],movimiento[1],self.jugador)
-            self.jugador = -1
-            self.movimientos_posibles = True
+          if movimientos_validos:
+            valor,movimiento = self.juego.minimax(self.juego.tablero,self.jugador,profundidad=self.elegir_dificultad)
+            if movimiento:
+              self.juego.realizar_movimiento(self.juego.tablero,movimiento[0],movimiento[1],self.jugador)
+              self.movimientos_posibles = True
+              
+              time.sleep(1)
+              for fila,ilera in enumerate(self.juego.tablero):
+                for columna,casilla in enumerate(ilera):
+                  if casilla == 1:
+                    self.botones[fila][columna].config(image=self.bot)
+                    self.principal.update()
+              
+              self.principal.update()
+        
+        saltar_turno = self.juego.obtener_movimientos_validos(self.juego.tablero,-1)
+        print(saltar_turno)
+        if saltar_turno:
+          print("hola")
+          self.jugador = -1
+          break
+        
+        elif not movimientos_validos:
+          break
+        
             
-            time.sleep(1)
-            for fila,ilera in enumerate(self.juego.tablero):
-              for columna,casilla in enumerate(ilera):
-                if casilla == 1:
-                  self.botones[fila][columna].config(image=self.bot)
-                  self.principal.update()
-            
-            self.principal.update()
     
+      
     self.principal.update()
+    
+    saltar_turno = self.juego.obtener_movimientos_validos(self.juego.tablero,-1)
+    movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,self.jugador)
+    
+    if not saltar_turno and not movimientos_validos:
+      self.victoria()
+      self.reiniciar_partida()
+      
+      
             
-    if not self.movimientos_posibles:
-      self.jugador = -1 if self.jugador == 1 else 1
-      self.movimientos_posibles = True
+    
+      
 
     contador_player, contador_bot = self.juego.contar_fichas(self.juego.tablero)
 
