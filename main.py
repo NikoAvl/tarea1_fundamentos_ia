@@ -266,7 +266,16 @@ class Reversi:
           self.principal.update()
           print(self.juego.tablero)
 
+          for fila,ilera in enumerate(self.juego.tablero):
+            for columna,casilla in enumerate(ilera):
+              if casilla == -1:
+                self.botones[fila][columna].config(image=self.raton)
+                self.principal.update()
+              
+
+
           self.principal.update()
+          
           
       if jugador == 1:
         
@@ -279,19 +288,21 @@ class Reversi:
             jugador = -1
             movimientos_posibles = True
             
+            time.sleep(1)
+            for fila,ilera in enumerate(self.juego.tablero):
+              for columna,casilla in enumerate(ilera):
+                if casilla == 1:
+                  self.botones[fila][columna].config(image=self.bot)
+                  self.principal.update()
+            
+            self.principal.update()
+    
+    self.principal.update()
+            
     if not movimientos_posibles:
       jugador = -1 if jugador == 1 else 1
       movimientos_posibles = True
 
-
-    
-    for fila,ilera in enumerate(self.juego.tablero):
-      for columna,casilla in enumerate(ilera):
-        if casilla == -1:
-          self.botones[fila][columna].config(image=self.raton)
-          self.principal.update()
-        elif casilla == 1:
-          self.botones[fila][columna].config(image=self.bot)
     
     self.principal.update()
           
