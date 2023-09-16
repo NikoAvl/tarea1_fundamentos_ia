@@ -139,9 +139,7 @@ class Reversi:
     elif dificultad == "dificil":
       self.elegir_dificultad = 4
     
-
     self.level.destroy()
-
     self.principal = Tk()
     self.principal.configure(bg="green")
     self.principal.title("Reversi")
@@ -151,8 +149,6 @@ class Reversi:
     self.vacio = PhotoImage(file="vacio.gif")
     self.juego = aisearch.JuegoReversi(size_tablero)
     self.principal.resizable(False, False)
-
-    
 
     #creo un boton de reinicio
     reiniciar_boton = Button(self.principal, text="Reiniciar", command=lambda: self.reiniciar_partida(),bg="blue",fg="white")
@@ -169,20 +165,23 @@ class Reversi:
     # Establecer la ubicación de la ventana centrada
     self.principal.geometry("+%d+%d" % (x, y))
 
-    for i in range(size_tablero):
-      fila = []
-      for j in range(size_tablero):
-        b1 = Button(self.principal, image=self.vacio, width="60", height="60")
-        
-        b1.bind("<Button-1>",
-                lambda event, size_tablero=size_tablero: self.click(
-                    event, size_tablero))
-        
-        b1.x = i
-        b1.y = j
-        b1.grid(row=i + 1, column=j)
-        fila.append(b1)
-      self.botones.append(fila)
+    try:
+      for i in range(size_tablero):
+        fila = []
+        for j in range(size_tablero):
+          b1 = Button(self.principal, image=self.vacio, width="60", height="60")
+          
+          b1.bind("<Button-1>",
+                  lambda event, size_tablero=size_tablero: self.click(
+                      event, size_tablero))
+          
+          b1.x = i
+          b1.y = j
+          b1.grid(row=i + 1, column=j)
+          fila.append(b1)
+        self.botones.append(fila)
+    except:
+      print("Algo salió mal")
 
     fila_centro = size_tablero // 2 - 1  # Restar 1 porque las listas comienzan desde 0
     columna_centro = size_tablero // 2 - 1
@@ -201,7 +200,6 @@ class Reversi:
     #mostrar puntaje
     contador_player, contador_bot = self.juego.contar_fichas(self.juego.tablero)
 
-      
     label_puntaje_player = Label(self.principal,text=f"player: {contador_player}",bg="green",fg="red")  
     label_puntaje_bot = Label(self.principal,text=f"bot: {contador_bot}",bg="green",fg="blue")  
     label_puntaje_player.grid(row=0,column=0)
@@ -212,7 +210,6 @@ class Reversi:
     solicitar_ayuda = Button(self.principal, text="ayuda", command=lambda: self.ayudar_player(),bg="blue",fg="white")
     solicitar_ayuda.grid(row=0, column=4)
     
-    
   def ayudar_player(self):
     try:
       valor,movimiento = self.juego.minimax(self.juego.tablero,-1,profundidad=4)
@@ -220,16 +217,12 @@ class Reversi:
     except:
       messagebox.showinfo("No se ha encontrado ningun movimiento posible!")
     
-    
-  
   def reiniciar_partida(self):
     self.juego.reiniciar()  # Reinicia el juego
     # Limpia el tablero
     self.principal.destroy()
     nueva_partida = Reversi()
     
-
-
   def victoria(self):
     contador_player, contador_bot = self.juego.contar_fichas(self.juego.tablero)
 
@@ -241,8 +234,6 @@ class Reversi:
     else:
       messagebox.showinfo(message="Empate...",title="Ganador")
   
-  
-
   def click(self, evento, size_tablero):
     self.movimientos_posibles = True
     
@@ -259,8 +250,6 @@ class Reversi:
           self.jugador = 1
           self.movimientos_posibles = True
 
-          
-
           self.principal.update()
           print(self.juego.tablero)
 
@@ -272,7 +261,6 @@ class Reversi:
               if casilla == -0:
                 self.botones[fila][columna].config(image=self.vacio)
                 self.principal.update()
-
 
           self.principal.update()
           
@@ -299,16 +287,13 @@ class Reversi:
         saltar_turno = self.juego.obtener_movimientos_validos(self.juego.tablero,-1)
         print(saltar_turno)
         if saltar_turno:
-          print("hola")
+          print("Saltando turno")
           self.jugador = -1
           break
         
         elif not movimientos_validos:
           break
         
-            
-    
-      
     self.principal.update()
     
     saltar_turno = self.juego.obtener_movimientos_validos(self.juego.tablero,-1)
@@ -318,25 +303,16 @@ class Reversi:
       self.victoria()
       self.reiniciar_partida()
       
-      
-            
-    
-      
-
     contador_player, contador_bot = self.juego.contar_fichas(self.juego.tablero)
 
-      
     label_puntaje_player = Label(self.principal,text=f"player: {contador_player}",bg="green",fg="red")  
     label_puntaje_bot = Label(self.principal,text=f"bot: {contador_bot}",bg="green",fg="blue")  
     label_puntaje_player.grid(row=0,column=0)
     label_puntaje_bot.grid(row=0,column=1)
     
-    
     self.principal.update()
-          
-        
-    
-          
 
-
-juego = Reversi()
+try:
+  juego = Reversi()
+except:       
+  print("Epsilon")
