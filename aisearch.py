@@ -52,8 +52,7 @@ class JuegoReversi:
         return
       else:
         self.ganador = None
-        
-
+   
   def calcular_utilidad(self):
     return self.ganador
 
@@ -89,7 +88,6 @@ class JuegoReversi:
               columna += delta_columna
       return False
 
-
   def movimiento_valido(self,tablero, fila, columna, jugador):
       if tablero[fila][columna] != 0:
           return False
@@ -97,7 +95,6 @@ class JuegoReversi:
       movimientos_validos = []
 
       direcciones = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
-
             
       for delta_fila, delta_columna in direcciones:
           if self.movimiento_valido_en_direccion(tablero, fila, columna, jugador, delta_fila, delta_columna):
@@ -108,7 +105,6 @@ class JuegoReversi:
   def realizar_movimiento(self,tablero, fila, columna, jugador):
     movimientos_validos = self.movimiento_valido(tablero, fila, columna, jugador)
     
-
     if not movimientos_validos:
         return False
 
@@ -122,16 +118,13 @@ class JuegoReversi:
             tablero[fila_actual][columna_actual] = jugador
             fila_actual += delta_fila
             columna_actual += delta_columna
-
     return True  
-  
   
   def contar_fichas(self, tablero):
     contador_player = sum(row.count(-1) for row in tablero)
     contador_bot = sum(row.count(1) for row in tablero)
     return contador_player, contador_bot
   
-    
   def puntuacion(self, tablero):
     puntuacion_player = sum(row.count(-1) for row in tablero)
     puntuacion_bot = sum(row.count(1) for row in tablero)
@@ -178,5 +171,3 @@ class JuegoReversi:
                   mejor_movimiento = movimiento
           print(f"movimientos validos3: {movimientos_validos}")
           return mejor_valor, mejor_movimiento 
-
-

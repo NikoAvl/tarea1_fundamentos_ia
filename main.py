@@ -287,7 +287,6 @@ class Reversi:
         saltar_turno = self.juego.obtener_movimientos_validos(self.juego.tablero,-1)
         print(saltar_turno)
         if saltar_turno:
-          print("Saltando turno")
           self.jugador = -1
           break
         
