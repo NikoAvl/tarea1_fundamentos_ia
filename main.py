@@ -212,7 +212,9 @@ class Reversi:
     
   def ayudar_player(self):
     try:
-      valor,movimiento = self.juego.minimax(self.juego.tablero,-1,profundidad=4)
+      # Calcula el próximo movimiento óptimo utilizando el algoritmo minimax
+      valor, movimiento = self.juego.minimax(self.juego.tablero, -1, profundidad=4)
+      # Actualiza la imagen de un botón en la interfaz gráfica para resaltar el movimiento seleccionado
       self.botones[movimiento[0]][movimiento[1]].config(image=self.imagen_ayuda_jugador)
     except:
       messagebox.showinfo("No se ha encontrado ningun movimiento posible!")
@@ -224,35 +226,40 @@ class Reversi:
     nueva_partida = Reversi()
     
   def victoria(self):
+    # Cuenta las fichas del jugador y del bot en el tablero del juego
     contador_player, contador_bot = self.juego.contar_fichas(self.juego.tablero)
-
+    # Determina quién tiene más fichas y muestra el resultado en un cuadro de diálogo
     if contador_player > contador_bot:
-      messagebox.showinfo(message="GANASTE!",title="Ganador")
-              
+      # Si el jugador tiene más fichas que el bot, muestra un mensaje de victoria
+      messagebox.showinfo(message="GANASTE!",title="Ganador")   
     elif contador_bot > contador_player:
+      # Si el bot tiene más fichas que el jugador, muestra un mensaje de derrota
       messagebox.showinfo(message="Perdiste :c",title="Ganador")
     else:
+      # Si el número de fichas del jugador y del bot es igual, muestra un mensaje de empate
       messagebox.showinfo(message="Empate...",title="Ganador")
   
   def click(self, evento, size_tablero):
     self.movimientos_posibles = True
-    
+    # Verifica si la casilla en la que se hizo clic está vacía (valor 0)
     if self.juego.tablero[evento.widget.x][evento.widget.y] == 0:
-      print("aqui si")
+      print("aqui si") # Verificación
+      # Lógica para el jugador humano (jugador == -1)
       if self.jugador == -1:
-        print("hola")
+        print("hola") # Verificación
+        # Realiza un movimiento válido si es posible
         fila = evento.widget.x
         columna = evento.widget.y
-        
+        # Verifica si el movimiento es válido y lo realiza
         if self.juego.movimiento_valido(self.juego.tablero,fila,columna,self.jugador):
-        
+
           self.juego.realizar_movimiento(self.juego.tablero,fila,columna,self.jugador)
           self.jugador = 1
           self.movimientos_posibles = True
 
           self.principal.update()
           print(self.juego.tablero)
-
+          # Actualiza la interfaz gráfica para mostrar el tablero actualizado
           for fila,ilera in enumerate(self.juego.tablero):
             for columna,casilla in enumerate(ilera):
               if casilla == -1:
@@ -265,17 +272,21 @@ class Reversi:
           self.principal.update()
           
       while True:
+        # Lógica para el jugador bot (jugador == 1)
         if self.jugador == 1:
-          
+          # Obtiene movimientos válidos para el bot
           movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,self.jugador)
 
           if movimientos_validos:
+            # Utiliza el algoritmo minimax para tomar una decisión
             valor,movimiento = self.juego.minimax(self.juego.tablero,self.jugador,profundidad=self.elegir_dificultad)
             if movimiento:
+              # Realiza el movimiento y actualiza la interfaz gráfica
               self.juego.realizar_movimiento(self.juego.tablero,movimiento[0],movimiento[1],self.jugador)
               self.movimientos_posibles = True
               
               time.sleep(1)
+              # Muestra las fichas en el tablero de acuerdo a su valor (1)
               for fila,ilera in enumerate(self.juego.tablero):
                 for columna,casilla in enumerate(ilera):
                   if casilla == 1:
@@ -283,7 +294,7 @@ class Reversi:
                     self.principal.update()
               
               self.principal.update()
-        
+        # Comprueba si el jugador humano debe pasar su turno
         saltar_turno = self.juego.obtener_movimientos_validos(self.juego.tablero,-1)
         print(saltar_turno)
         if saltar_turno:
@@ -294,12 +305,14 @@ class Reversi:
           break
         
     self.principal.update()
-    
+    # Comprueba si la partida ha terminado
     saltar_turno = self.juego.obtener_movimientos_validos(self.juego.tablero,-1)
     movimientos_validos = self.juego.obtener_movimientos_validos(self.juego.tablero,self.jugador)
     
     if not saltar_turno and not movimientos_validos:
+      # Llama a la función 'victoria' para determinar el resultado de la partida
       self.victoria()
+      # Reinicia la partida
       self.reiniciar_partida()
       
     contador_player, contador_bot = self.juego.contar_fichas(self.juego.tablero)
@@ -311,7 +324,9 @@ class Reversi:
     
     self.principal.update()
 
+# Intenta inicializar el juego (posiblemente la clase 'Reversi')
 try:
   juego = Reversi()
 except:       
+  # Manejo de excepción si ocurre algún error durante la inicialización
   print("Epsilon")
